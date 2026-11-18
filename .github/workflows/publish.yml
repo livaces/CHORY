@@ -19,6 +19,3 @@ jobs:
         with:
           folder: www
           branch: gh-pages
-
-0
-
