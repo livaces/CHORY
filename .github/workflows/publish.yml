@@ -16,8 +16,6 @@ jobs:
       
       - name: Build Logseq
         uses: logseq/publish-spa@v0.3.0
-        with:
-          version: latest
           
       - name: Add nojekyll
         run: touch $GITHUB_WORKSPACE/www/.nojekyll
