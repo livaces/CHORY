@@ -1,4 +1,5 @@
-name: Publish Logseq
+name: Publicar Logseq
+
 on:
   push:
     branches: [main]
@@ -8,14 +9,29 @@ permissions:
   contents: write
 
 jobs:
-  publish:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: logseq/publish-spa@v0.3.0
-      - name: Add nojekyll
-        run: touch $GITHUB_WORKSPACE/www/.nojekyll
-      - uses: JamesIves/github-pages-deploy-action@v4
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar Logseq
+        run: |
+          npm install -g @logseq/cli
+          logseq --version
+
+      - name: Exportar o Graph
+        run: |
+          mkdir -p www
+          logseq export --graph . --output www --format html
+
+      - name: Deploy para GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: www
           branch: gh-pages
